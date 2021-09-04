@@ -14,11 +14,14 @@ public class Matches {
             int matches = Integer.parseInt(input.nextLine());
             if ((matches < 1) || (matches > 3)) {
                 continue;
-            } else {
+            }
+            if (matches > count) {
+                System.out.println("Спичек осталось всего " + count + " ! Не тупи!");
+                continue;
+            }
                 turn = !turn;
                 count = count - matches;
                 System.out.println("На столе осталось " + count + " спичек");
-            }
         }
         if (!turn) {
             System.out.println("Выиграл первый игрок");
