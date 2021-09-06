@@ -2,6 +2,7 @@ package ru.job4j.tracker;
 
 import org.junit.Test;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public class StartUITest {
@@ -22,11 +23,26 @@ public class StartUITest {
     }
 
     @Test
-    public void editItem() {
+    public void whenEditItem() {
+        Tracker tracker = new Tracker();
+        Item item = new Item("new item");
+        tracker.add(item);
+        String[] answers = {String.valueOf(item.getId()), "replaced item"};
+        StartUI.editItem(new StubInput(answers), tracker);
+        Item replaced = tracker.findById(item.getId());
+        assertThat(replaced.getName(), is("replaced item"));
     }
 
     @Test
-    public void deleteItem() {
+    public void whenDeleteItem() {
+        Tracker tracker = new Tracker();
+        Item item = new Item("new item");
+        Item item1 = new Item("new item1");
+        tracker.add(item);
+        tracker.add(item1);
+        String[] answers = {String.valueOf(item.getId())};
+        StartUI.deleteItem(new StubInput(answers), tracker);
+        assertThat(tracker.findById(item.getId()), is(nullValue()));
     }
 
     @Test
