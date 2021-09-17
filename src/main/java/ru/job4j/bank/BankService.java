@@ -48,15 +48,12 @@ public class BankService {
                                  String destPassport, String destRequisite, double amount) {
         boolean rsl = false;
         Account srcAcc = this.findByRequisite(srcPassport, srcRequisite);
-        Account destAcc = this.findByRequisite(srcPassport, destRequisite);
-        if (this.findByPassport(srcPassport) != null
-                && this.findByPassport(destPassport) != null) {
+        Account destAcc = this.findByRequisite(destPassport, destRequisite);
             if (srcAcc != null && destAcc != null && srcAcc.getBalance() >= amount) {
                 destAcc.setBalance(destAcc.getBalance() + amount);
                 srcAcc.setBalance(srcAcc.getBalance() - amount);
                 rsl = true;
             }
-        }
         return rsl;
     }
 }
