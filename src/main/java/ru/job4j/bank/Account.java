@@ -2,7 +2,15 @@ package ru.job4j.bank;
 
 import java.util.Objects;
 
+/**
+ * Класс описывает модель данных банковского счёта
+ * @author не я
+ * @version 1.0
+ */
 public class Account {
+    /**
+     * Счёт имеет два поля: реквизиты и баланс
+     */
     private String requisite;
     private double balance;
 
