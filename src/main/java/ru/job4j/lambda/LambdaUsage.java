@@ -32,12 +32,4 @@ public class LambdaUsage {
         };
         Arrays.sort(names1, lengthCmp1);
     }
-
-    public static List<Double> diapason(int start, int end, Function<Double, Double> func) {
-        List<Double> rsl = new ArrayList();
-        for (int i = start; i < end; i++) {
-            rsl.add(func.apply(Double.valueOf(i)));
-        }
-        return rsl;
-    }
 }
