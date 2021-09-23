@@ -12,7 +12,7 @@ import java.util.function.*;
 public class StudentListTest {
     @Test
     public void studentList() {
-        Student st1 = new Student(35, "Ivanov");
+        Student st1 = new Student(75, "Ivanov");
         Student st2 = new Student(40, "Petrov");
         Student st3 = new Student(85, "Sidorov");
         Student st4 = new Student(35, "Ivanov");
