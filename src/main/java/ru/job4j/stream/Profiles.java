@@ -14,8 +14,8 @@ public class Profiles {
 
     public List<Address> sort(List<Address> addresses) {
         return addresses.stream()
-                .distinct()
                 .sorted(new CityComparator())
+                .distinct()
                 .collect(Collectors.toList());
     }
 
