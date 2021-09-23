@@ -32,4 +32,18 @@ public class ProfilesTest {
         List<Address> expected = List.of(adr1, adr2, adr3, adr4);
         assertThat(result, is(expected));
     }
+
+    @Test
+    public void sort() {
+        Address adr1 = new Address("Moscow", "qwert", 1, 3);
+        Address adr2 = new Address("Mo", "q", 10, 30);
+        Address adr3 = new Address("scow", "e", 11, 31);
+        Address adr4 = new Address("Scow", "qwer", 12, 32);
+        Address adr5 = new Address("Moscow", "qwert", 1, 3);
+        List<Address> source = List.of(adr1, adr2, adr3, adr4, adr5);
+        Profiles pr = new Profiles();
+        List<Address> result = pr.sort(source);
+        List<Address> expected = List.of(adr2, adr1, adr4, adr3);
+        assertThat(result, is(expected));
+    }
 }
