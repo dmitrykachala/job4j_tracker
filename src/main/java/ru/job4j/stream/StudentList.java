@@ -10,6 +10,6 @@ public class StudentList {
     public Map<String, Student> studentList(List<Student> students) {
         return students.stream()
                 .collect(Collectors.toMap(Student::getSurname, s -> s,
-                        (s1, s2) -> (s1.getScore() > s2.getScore() ? s1 : s2)));
+                        (s1, s2) -> s1));
     }
 }
