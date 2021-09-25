@@ -12,20 +12,18 @@ public class College {
     }
 
     public Optional<Student> findByAccount(String account) {
-        return Optional.of(students.keySet()
+        return students.keySet()
                 .stream()
                 .filter(s -> s.getAccount().equals(account))
-                .findFirst())
-                .orElse(Optional.empty());
+                .findFirst();
     }
 
     public Optional<Subject> findBySubjectName(String account, String name) {
         Optional<Student> a = findByAccount(account);
-        return a.flatMap(student -> Optional.of(students.get(student)
+        return a.flatMap(student -> students.get(student)
                         .stream()
                         .filter(s -> s.getName().equals(name))
-                        .findFirst())
-                        .orElse(Optional.empty()));
+                        .findFirst());
     }
 
     public static void main(String[] args) {
