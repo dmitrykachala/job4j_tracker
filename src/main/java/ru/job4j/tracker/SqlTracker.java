@@ -2,6 +2,7 @@ package ru.job4j.tracker;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -88,9 +89,13 @@ public class SqlTracker implements Store {
         try (PreparedStatement statement = cn.prepareStatement("select * from items")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
+                    long millis = System.currentTimeMillis();
+                    Timestamp timestamp = new Timestamp(millis);
+                    LocalDateTime localDateTime = timestamp.toLocalDateTime();
                     items.add(new Item(
                             resultSet.getInt("id"),
-                            resultSet.getString("name")
+                            resultSet.getString("name"),
+                            localDateTime
                     ));
                 }
             }
@@ -108,9 +113,13 @@ public class SqlTracker implements Store {
             statement.setString(1, key);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
+                    long millis = System.currentTimeMillis();
+                    Timestamp timestamp = new Timestamp(millis);
+                    LocalDateTime localDateTime = timestamp.toLocalDateTime();
                     items.add(new Item(
                             resultSet.getInt("id"),
-                            resultSet.getString("name")
+                            resultSet.getString("name"),
+                            localDateTime
                     ));
                 }
             }
@@ -122,21 +131,25 @@ public class SqlTracker implements Store {
 
     @Override
     public Item findById(int id) {
-        Item rsl = new Item();
+        Item rsl = null;
         try (PreparedStatement statement =
                      cn.prepareStatement("select * from items where id = ?")) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
+                if (resultSet.next()) {
+                    long millis = System.currentTimeMillis();
+                    Timestamp timestamp = new Timestamp(millis);
+                    LocalDateTime localDateTime = timestamp.toLocalDateTime();
                     rsl = new Item(
                             resultSet.getInt("id"),
-                            resultSet.getString("name")
+                            resultSet.getString("name"),
+                            localDateTime
                     );
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return rsl.getId() == 0 ? null : rsl;
+        return rsl;
     }
 }
