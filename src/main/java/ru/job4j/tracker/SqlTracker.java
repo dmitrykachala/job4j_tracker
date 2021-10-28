@@ -97,13 +97,10 @@ public class SqlTracker implements Store {
         try (PreparedStatement statement = cn.prepareStatement("select * from items")) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    long millis = System.currentTimeMillis();
-                    Timestamp timestamp = new Timestamp(millis);
-                    LocalDateTime localDateTime = timestamp.toLocalDateTime();
                     items.add(new Item(
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
-                            localDateTime
+                            resultSet.getTimestamp("created").toLocalDateTime()
                     ));
                 }
             }
@@ -121,13 +118,10 @@ public class SqlTracker implements Store {
             statement.setString(1, key);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    long millis = System.currentTimeMillis();
-                    Timestamp timestamp = new Timestamp(millis);
-                    LocalDateTime localDateTime = timestamp.toLocalDateTime();
                     items.add(new Item(
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
-                            localDateTime
+                            resultSet.getTimestamp("created").toLocalDateTime()
                     ));
                 }
             }
@@ -145,13 +139,10 @@ public class SqlTracker implements Store {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    long millis = System.currentTimeMillis();
-                    Timestamp timestamp = new Timestamp(millis);
-                    LocalDateTime localDateTime = timestamp.toLocalDateTime();
                     rsl = new Item(
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
-                            localDateTime
+                            resultSet.getTimestamp("created").toLocalDateTime()
                     );
                 }
             }
