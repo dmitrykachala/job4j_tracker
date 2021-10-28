@@ -113,5 +113,6 @@ public class SqlTrackerTest {
         tracker.add(item2);
         Item replaced = new Item(item2.getId(), "replaced");
         assertTrue(tracker.replace(item2.getId(), replaced));
+        assertThat(tracker.findById(item2.getId()), is(replaced));
     }
 }
