@@ -1,13 +1,13 @@
 package ru.job4j.tracker;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
 @Table(name = "items")
-
 public class Item {
 
     private static final DateTimeFormatter FORMATTER =
@@ -17,6 +17,9 @@ public class Item {
     private int id;
     private String name;
     private LocalDateTime created = LocalDateTime.now();
+
+    private String description;
+    private Timestamp createdNew;
 
     public Item() {
 
@@ -35,6 +38,13 @@ public class Item {
         this.id = id;
         this.name = name;
         this.created = created;
+    }
+
+    public Item(String name, LocalDateTime created, String description, Timestamp createdNew) {
+        this.name = name;
+        this.created = created;
+        this.description = description;
+        this.createdNew = createdNew;
     }
 
     public int getId() {

@@ -6,6 +6,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HibernateRun {
@@ -26,6 +28,14 @@ public class HibernateRun {
             for (Item it : list) {
                 System.out.println(it);
             }
+
+            Item i1 = create(new Item("Learn Hibernate", LocalDateTime.now(), "1",
+                    new Timestamp(1459510232000L)), sf);
+            Item i2 = create(new Item("Learn Hibernate2", LocalDateTime.now(), "2",
+                    new Timestamp(1459510232000L)), sf);
+            Item i3 = create(new Item("Learn Hibernate3", LocalDateTime.now(), "3",
+                    new Timestamp(1459510232000L)), sf);
+
         }  catch (Exception e) {
             e.printStackTrace();
         } finally {
