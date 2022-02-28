@@ -62,6 +62,7 @@ public class HbmTracker implements Store, AutoCloseable {
             session.delete(findById(id));
             session.getTransaction().commit();
             session.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +87,8 @@ public class HbmTracker implements Store, AutoCloseable {
         try {
             Session session = sf.openSession();
             List result = session
-                    .createQuery("from ru.job4j.tracker.Item where name = :key").list();
+                    .createQuery("from ru.job4j.tracker.Item where name = :key")
+                    .setParameter("key", key).list();
             session.close();
             return result;
         } catch (Exception e) {
