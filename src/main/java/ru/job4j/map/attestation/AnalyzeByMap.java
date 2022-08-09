@@ -1,58 +1,72 @@
 package ru.job4j.map.attestation;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class AnalyzeByMap {
     public static double averageScore(List<Pupil> pupils) {
-        return pupils.stream().map(Pupil::subjects)
-                .flatMap(Collection::stream)
-                .mapToInt(Subject::score)
-                .average()
-                .orElse(0);
+        double score = 0;
+        int count = 0;
+        for (Pupil p : pupils) {
+            for (Subject s : p.subjects()) {
+                count++;
+                score += s.score();
+            }
+        }
+        return score / count;
     }
 
-    public static List<Label> averageScoreBySubject/*Pupil*/(List<Pupil> pupils) {
-        return pupils.stream().flatMap(p -> p.subjects().stream())
-                .collect(Collectors.groupingBy(Subject::name,
-                        LinkedHashMap::new, Collectors.averagingDouble(Subject::score)))
-                .entrySet()
-                .stream()
-                .map(s -> new Label(s.getKey(), s.getValue()))
-                .collect(Collectors.toList());
+    public static List<Label> averageScoreBySubject(List<Pupil> pupils) {
+        List<Label> result = new ArrayList<>();
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        for (Pupil p : pupils) {
+            for (Subject s : p.subjects()) {
+
+                tempMap.computeIfPresent(s.name(), (name, sc) -> sc = sc + s.score());
+                tempMap.putIfAbsent(s.name(), s.score());
+                }
+            }
+        tempMap.forEach((name, sc) -> result.add(new Label(name, sc / pupils.size())));
+        return result;
     }
 
-    public static List<Label> averageScoreByPupil/*Subject*/(List<Pupil> pupils) {
-        return pupils.stream().map(p -> new Label(p.name(),
-                        p.subjects().stream()
-                                .mapToInt(Subject::score)
-                                .average()
-                                .orElse(0)))
-                .collect(Collectors.toList());
+    public static List<Label> averageScoreByPupil(List<Pupil> pupils) {
+        List<Label> result = new ArrayList<>();
+        for (Pupil p : pupils) {
+            double sum = 0;
+            for (Subject s : p.subjects()) {
+                sum += s.score();
+            }
+            result.add(new Label(p.name(), sum / p.subjects().size()));
+        }
+        return result;
     }
 
     public static Label bestStudent(List<Pupil> pupils) {
-        long counter = pupils.size();
-        return pupils.stream().map(p -> new Label(p.name(),
-                p.subjects().stream()
-                        .mapToInt(Subject::score)
-                        .sum()))
-                .sorted(Comparator.naturalOrder())
-                .skip(counter - 1)
-                .findFirst().get();
+        List<Label> res = new ArrayList<>();
+        for (Pupil p : pupils) {
+            double sum = 0;
+            for (Subject s : p.subjects()) {
+                sum += s.score();
+            }
+            res.add(new Label(p.name(), sum));
+        }
+        res.sort(Comparator.naturalOrder());
+        return res.get(pupils.size() - 1);
     }
 
     public static Label bestSubject(List<Pupil> pupils) {
-        return pupils.stream().flatMap(p -> p.subjects().stream())
-                .collect(Collectors.groupingBy(Subject::name,
-                        LinkedHashMap::new, Collectors.summingDouble(Subject::score)))
-                .entrySet()
-                .stream()
-                .map(s -> new Label(s.getKey(), s.getValue()))
-                .max(Comparator.comparingDouble(Label::score)).orElse(null);
+        List<Label> list = new ArrayList<>();
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        for (Pupil p : pupils) {
+            for (Subject s : p.subjects()) {
+
+                tempMap.computeIfPresent(s.name(), (name, sc) -> sc = sc + s.score());
+                tempMap.putIfAbsent(s.name(), s.score());
+            }
+        }
+        tempMap.forEach((name, sc) -> list.add(new Label(name, sc)));
+        list.sort(Comparator.naturalOrder());
+        return list.get(pupils.size() - 1);
     }
 
 }
