@@ -17,14 +17,7 @@ public class AnalyzeByMap {
 
     public static List<Label> averageScoreBySubject(List<Pupil> pupils) {
         List<Label> result = new ArrayList<>();
-        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
-        for (Pupil p : pupils) {
-            for (Subject s : p.subjects()) {
-
-                tempMap.computeIfPresent(s.name(), (name, sc) -> sc = sc + s.score());
-                tempMap.putIfAbsent(s.name(), s.score());
-                }
-            }
+        Map<String, Integer> tempMap = toTempMap(pupils);
         tempMap.forEach((name, sc) -> result.add(new Label(name, sc / pupils.size())));
         return result;
     }
@@ -56,17 +49,20 @@ public class AnalyzeByMap {
 
     public static Label bestSubject(List<Pupil> pupils) {
         List<Label> list = new ArrayList<>();
-        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
-        for (Pupil p : pupils) {
-            for (Subject s : p.subjects()) {
-
-                tempMap.computeIfPresent(s.name(), (name, sc) -> sc = sc + s.score());
-                tempMap.putIfAbsent(s.name(), s.score());
-            }
-        }
+        Map<String, Integer> tempMap = toTempMap(pupils);
         tempMap.forEach((name, sc) -> list.add(new Label(name, sc)));
         list.sort(Comparator.naturalOrder());
         return list.get(pupils.size() - 1);
+    }
+
+    private static Map<String, Integer> toTempMap(List<Pupil> pupils) {
+        LinkedHashMap<String, Integer> tempMap = new LinkedHashMap<>();
+        for (Pupil p : pupils) {
+            for (Subject s : p.subjects()) {
+                tempMap.merge(s.name(), s.score(), Integer::sum);
+            }
+        }
+        return tempMap;
     }
 
 }
