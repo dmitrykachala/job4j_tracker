@@ -35,6 +35,9 @@ public class PasswordValidator {
             if (!isLetterOrDigit(c)) {
                 hasSpecial = true;
             }
+            if (hasUpper && hasLower && hasDigit && hasSpecial) {
+                break;
+            }
         }
         if (!hasUpper || !hasLower || !hasDigit || !hasSpecial) {
             throw new IllegalArgumentException("Password must have at least one special symbol,"
