@@ -1,12 +1,14 @@
 package ru.job4j.tracker;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "items")
 public class Item {
@@ -46,26 +48,6 @@ public class Item {
         this.created = created;
         this.description = description;
         this.createdNew = createdNew;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
     }
 
     @Override
