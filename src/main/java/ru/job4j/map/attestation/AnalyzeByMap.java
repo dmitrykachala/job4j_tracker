@@ -1,6 +1,7 @@
 package ru.job4j.map.attestation;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AnalyzeByMap {
     public static double averageScore(List<Pupil> pupils) {
@@ -16,10 +17,17 @@ public class AnalyzeByMap {
     }
 
     public static List<Label> averageScoreBySubject(List<Pupil> pupils) {
-        List<Label> result = new ArrayList<>();
-        Map<String, Integer> tempMap = toTempMap(pupils);
-        tempMap.forEach((name, sc) -> result.add(new Label(name, sc / pupils.size())));
-        return result;
+/*        return pupils.stream().flatMap(p -> p.subjects().stream())
+                .collect(Collectors.groupingBy(Subject::name,
+                        Collectors.averagingDouble(Subject::score)))
+                .entrySet().stream().map(v -> new Label(v.getKey(), v.getValue())).toList();*/
+        Map<String, Double> tempMap = new HashMap<>();
+        pupils.stream().flatMap(p -> p.subjects().stream())
+                .forEach(subj -> {
+                    tempMap.merge(subj.name(), (subj.score() / (double) pupils.size()),
+                            Double::sum);
+                });
+        return tempMap.entrySet().stream().map(v -> new Label(v.getKey(), v.getValue())).toList();
     }
 
     public static List<Label> averageScoreByPupil(List<Pupil> pupils) {
@@ -48,11 +56,13 @@ public class AnalyzeByMap {
     }
 
     public static Label bestSubject(List<Pupil> pupils) {
-        List<Label> list = new ArrayList<>();
-        Map<String, Integer> tempMap = toTempMap(pupils);
-        tempMap.forEach((name, sc) -> list.add(new Label(name, sc)));
-        list.sort(Comparator.naturalOrder());
-        return list.get(pupils.size() - 1);
+        Map<String, Double> tempMap = new HashMap<>();
+        pupils.stream().flatMap(p -> p.subjects().stream())
+                .forEach(subj -> {
+                    tempMap.merge(subj.name(), (double) subj.score(), Double::sum);
+                });
+        return tempMap.entrySet().stream().map(v -> new Label(v.getKey(), v.getValue()))
+                .max(Label::compareTo).get();
     }
 
     private static Map<String, Integer> toTempMap(List<Pupil> pupils) {
